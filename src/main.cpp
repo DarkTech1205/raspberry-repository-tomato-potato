@@ -52,7 +52,7 @@ protected:
         m_body = CCNode::create();
         m_body->setContentSize({340.f, 245.f});
         m_mainLayer->addChildAtPosition(m_body, Anchor::Center);
-        show(Home);
+        showPage(Home);
         return true;
     }
 public:
@@ -65,23 +65,23 @@ public:
     void clicked(CCObject* obj) {
         int n = obj->getTag();
         switch (n) {
-            case 1: show(Shop); break;
-            case 2: show(Shortcuts); break;
-            case 3: show(Gags); break;
-            case 4: show(Gallery); break;
-            case 5: show(Dev); break;
-            case 6: show(Rewards); break;
+            case 1: showPage(Shop); break;
+            case 2: showPage(Shortcuts); break;
+            case 3: showPage(Gags); break;
+            case 4: showPage(Gallery); break;
+            case 5: showPage(Dev); break;
+            case 6: showPage(Rewards); break;
             case 7: reset(); break;
-            case 8: show(Home); break;
-            case 9: show(Portal); break;
+            case 8: showPage(Home); break;
+            case 9: showPage(Portal); break;
             case 10: approval(); break;
             case 11: stars(); break;
             case 12: spike(); break;
             case 13: chaos(); break;
             case 14: unlockAll(); break;
             case 15: restoreLook(); break;
-            case 20: show(Gallery); break;
-            case 21: show(Dev); break;
+            case 20: showPage(Gallery); break;
+            case 21: showPage(Dev); break;
             case 22: speedMock(); break;
             default:
                 if (n >= 100 && n < 100 + static_cast<int>(std::size(PRODUCTS))) buy(n - 100);
@@ -109,7 +109,7 @@ private:
         menu->addChild(item);
         m_body->addChild(menu);
     }
-    void show(Page p) {
+    void showPage(Page p) {
         m_body->removeAllChildren();
         float y = 222.f;
         auto line = [&](std::string s, float size = .37f) { label(s, y, size); y -= 24.f; };
@@ -216,29 +216,29 @@ private:
             }
             saveBalance(current - price);
             grant(id.c_str());
-            self->show(Shop);
+            self->showPage(Shop);
         });
     }
     void approval() {
         auto next = !Mod::get()->getSavedValue<bool>(APPROVED, false);
         Mod::get()->setSavedValue<bool>(APPROVED, next);
         FLAlertLayer::create("LOCAL MOD GAG", next ? "Fake stamp added to this panel only. Nothing was rated, uploaded, or sent." : "Fake local stamp removed.", "OK")->show();
-        show(Gags);
+        showPage(Gags);
     }
     void stars() {
         if (!hasItem("stars")) return FLAlertLayer::create("Locked gag", "Unlock Star Shower in the Shop. It never changes game stats.", "OK")->show();
         m_stars = 9000;
-        show(Gags);
+        showPage(Gags);
     }
     void spike() {
         if (!hasItem("spike")) return FLAlertLayer::create("Locked gag", "Unlock Spike Amnesty in the Shop first.", "OK")->show();
         Mod::get()->setSavedValue<bool>(SPIKE, !Mod::get()->getSavedValue<bool>(SPIKE, false));
-        show(Gags);
+        showPage(Gags);
     }
     void chaos() {
         if (!hasItem("chaos")) return FLAlertLayer::create("Locked gag", "Unlock Menu Worse-ifier in the Shop first.", "OK")->show();
         Mod::get()->setSavedValue<bool>(CHAOS, !Mod::get()->getSavedValue<bool>(CHAOS, false));
-        show(Gags);
+        showPage(Gags);
     }
     void unlockAll() {
         if (!hasItem("dev")) return FLAlertLayer::create("Locked drawer", "Unlock Developer Buttons Drawer in the Shop first.", "OK")->show();
@@ -246,7 +246,7 @@ private:
         createQuickPopup("LOCAL MOD GAG", "Unlock every shop item for this mod only? Nothing in Geometry Dash itself changes.", "Cancel", "Unlock", [self](auto, bool confirm) {
             if (!confirm) return;
             for (auto const& item : PRODUCTS) grant(item.id);
-            self->show(Shortcuts);
+            self->showPage(Shortcuts);
         });
     }
     void restoreLook() {
@@ -255,7 +255,7 @@ private:
         Mod::get()->setSavedValue<bool>(CHAOS, false);
         m_stars = 0;
         FLAlertLayer::create("Panel restored", "Local gags are off. Purchased unlocks remain owned.", "OK")->show();
-        show(Dev);
+        showPage(Dev);
     }
     void reset() {
         Ref<BucksPopup> self(this);
@@ -267,7 +267,7 @@ private:
             Mod::get()->setSavedValue<bool>(SPIKE, false);
             Mod::get()->setSavedValue<bool>(CHAOS, false);
             self->m_stars = 0;
-            self->show(Home);
+            self->showPage(Home);
         });
     }
     void speedMock() {
