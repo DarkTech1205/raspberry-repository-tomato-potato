@@ -1,7 +1,12 @@
+
 name: Build Geode Mod
 
 on:
   push:
+    branches:
+      - "**"
+    tags:
+      - "v*"
   pull_request:
   workflow_dispatch:
 
@@ -10,32 +15,39 @@ permissions:
 
 jobs:
   build:
-    name: ${{ matrix.platform.name }}
-    runs-on: ${{ matrix.platform.os }}
-
+    name: Build ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - name: Windows
+        include:
+          - platform: Windows
             os: windows-latest
             target: Win64
-
-          - name: macOS
+          - platform: macOS
             os: macos-latest
             target: MacOS
-
-          - name: Android 64-bit
+          - platform: Android 64-bit
             os: ubuntu-latest
             target: Android64
 
     steps:
-      - name: Checkout
+      - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Build Geode mod
+      - name: Build mod
+        id: build
         uses: geode-sdk/build-geode-mod@main
         with:
+          path: .
           sdk: v6.0.0-alpha.1
-          target: ${{ matrix.platform.target }}
+          target: ${{ matrix.target }}
           build-config: Release
+
+      - name: Upload .geode artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: how-to-ruin-gd-${{ matrix.platform }}
+          path: ${{ steps.build.outputs.build-output }}/*.geode
+          if-no-files-found: error
+          retention-days: 14
