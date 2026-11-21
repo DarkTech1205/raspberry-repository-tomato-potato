@@ -1,0 +1,17 @@
+{
+	"geode": "6.0.0-alpha.1",
+	"gd": { "win": "2.2091" },
+	"version": "v1.0.0",
+	"id": "satire.how-to-ruin-gd",
+	"name": "How To Ruin Geometry Dash",
+	"developer": "Satire Dept.",
+	"description": "A parody mod that monetizes every button. All money is fictional wallet credit. Nothing is real, nothing touches GD servers.",
+	"tags": ["fun", "joke"],
+	"resources": { "sprites": ["resources/*.png"] },
+	"settings": {
+		"enable-ads": { "type": "bool", "name": "Enable advertisements", "description": "Forced and banner ads. Rewarded ads are always optional.", "default": true },
+		"ad-every-n-attempts": { "type": "int", "name": "Forced ad every N attempts", "default": 5, "min": 2, "max": 50 },
+		"sub-period-minutes": { "type": "int", "name": "Subscription 'month' length (real minutes)", "description": "How long one simulated month lasts before auto-renew.", "default": 30, "min": 1, "max": 1440 },
+		"rotation-hours": { "type": "int", "name": "Shop rotation slot (hours)", "default": 6, "min": 1, "max": 168 }
+	}
+}
